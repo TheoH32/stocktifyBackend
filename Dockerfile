@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM openjdk:17
+FROM openjdk:18
 WORKDIR /app
 COPY . /app
 RUN ./mvnw package
