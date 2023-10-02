@@ -151,6 +151,17 @@
             <artifactId>commonmark</artifactId>
             <version>0.17.2</version>
         </dependency>
+        <dependency>
+	        <groupId>com.yahoofinance-api</groupId>
+	        <artifactId>YahooFinanceAPI</artifactId>
+	        <version>3.17.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -26,7 +26,7 @@ public class App {
         Network network1000 = new Network(1000);
         network1000.train(data, answers);
 
-        System.out.println("");
+        System.out.println(""); // p/e and earnings growth rate
         System.out.println(String.format("Google: 28, -12: network500: %.10f | network1000: %.10f",
                 network500.predict(28, -12), network1000.predict(28, -12)));
         System.out.println(String.format("???: network500: %.10f | network1000: %.10f",
