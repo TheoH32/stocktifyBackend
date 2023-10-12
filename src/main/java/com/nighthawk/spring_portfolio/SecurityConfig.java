@@ -68,8 +68,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			// list the requests/endpoints need to be authenticated
 			.authorizeRequests()
 				// Change "permitAll" to "authenticated" to enable authentication
-				.antMatchers("/mvc/person/update/**", "/mvc/person/delete/**").permitAll()
-				.antMatchers("/api/person/**").permitAll()
+				.antMatchers("/mvc/person/update/**", "/mvc/person/delete/**").authenticated()
+				.antMatchers("/api/person/**").authenticated()
 				.and()
 			// support cors
 			.cors().and()
