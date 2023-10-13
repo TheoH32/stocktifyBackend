@@ -26,6 +26,7 @@ public class App {
         Network network1000 = new Network(1000);
         network1000.train(data, answers);
 
+        /*
         System.out.println(""); // p/e and earnings growth rate
         System.out.println(String.format("Google: 28, -12: network500: %.10f | network1000: %.10f",
                 network500.predict(28, -12), network1000.predict(28, -12)));
@@ -33,7 +34,7 @@ public class App {
                 network500.predict(45, -8), network1000.predict(45, -8)));
         System.out.println(String.format("???: network500: %.10f | network1000: %.10f",
                 network500.predict(90, 90), network1000.predict(90, 90)));
-        
+         */
 
         /*
          * Network network500learn1 = new Network(500, 2.0);
@@ -102,8 +103,7 @@ public class App {
                 Double thisEpochLoss = Util.meanSquareLoss(answers, predictions);
 
                 if (epoch % 10 == 0)
-                    System.out.println(String.format("Epoch: %s | bestEpochLoss: %.15f | thisEpochLoss: %.15f", epoch,
-                            bestEpochLoss, thisEpochLoss));
+                    // System.out.println(String.format("Epoch: %s | bestEpochLoss: %.15f | thisEpochLoss: %.15f", epoch, bestEpochLoss, thisEpochLoss));
 
                 if (bestEpochLoss == null) {
                     bestEpochLoss = thisEpochLoss;
