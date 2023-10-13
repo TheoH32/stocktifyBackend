@@ -1,24 +1,30 @@
 package com.nighthawk.spring_portfolio;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import com.nighthawk.spring_portfolio.mvc.jwt.JwtAuthenticationEntryPoint;
+import com.nighthawk.spring_portfolio.mvc.jwt.JwtRequestFilter;
+import com.nighthawk.spring_portfolio.mvc.person.PersonDetailsService;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import com.nighthawk.spring_portfolio.mvc.jwt.JwtAuthenticationEntryPoint;
-import com.nighthawk.spring_portfolio.mvc.jwt.JwtRequestFilter;
-import com.nighthawk.spring_portfolio.mvc.person.PersonDetailsService;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
 
 
 
@@ -44,6 +50,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("https://theoh32.github.io")); // Add other allowed origins if needed
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+		configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "x-csrf-token"));
+		configuration.setAllowCredentials(true); // Allow credentials
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
+
+
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		// configure AuthenticationManager so that it knows from where to load
@@ -67,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.csrf().disable()
 			// list the requests/endpoints need to be authenticated
 			.authorizeRequests()
-				// Change "permitAll" to "authenticated" to enable authentication
+// Change "permitAll" to "authenticated" to enable authentication
 				.antMatchers("/mvc/person/update/**", "/mvc/person/delete/**").permitAll()
 				.antMatchers("/api/person/**").permitAll()
 				.and()
@@ -79,7 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Headers", "Content-Type", "Authorization", "x-csrf-token"))
 				.addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-MaxAge", "600"))
 				.addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Methods", "POST", "GET", "OPTIONS", "HEAD"))
-				//.addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin", "https://nighthawkcoders.github.io", "http://localhost:4000"))
+				.addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin", "https://theoh32.github.io", "http://localhost:4100"))
 				.and()
 			.formLogin()
                 .loginPage("/login")
