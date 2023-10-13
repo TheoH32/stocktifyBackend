@@ -9,10 +9,15 @@ import java.lang.Math;
 public class App {
     public static void main(String[] args) {
         App app = new App();
-        app.trainAndPredict();
+        app.trainAndPredict(28, -12);
     }
 
-    public void trainAndPredict() {
+    public double makeAPrediction(int num1, int num2) {
+        App app = new App();
+        return app.trainAndPredict(num1, num2);
+    }
+
+    public double trainAndPredict(int num1, int num2) {
         List<List<Integer>> data = new ArrayList<List<Integer>>();
         data.add(Arrays.asList(28, -12));
         data.add(Arrays.asList(28, 21));
@@ -26,14 +31,19 @@ public class App {
         Network network1000 = new Network(1000);
         network1000.train(data, answers);
 
+        double prediction = network500.predict(num1, num2);
+
         /*
-        System.out.println(""); // p/e and earnings growth rate
-        System.out.println(String.format("Google: 28, -12: network500: %.10f | network1000: %.10f",
-                network500.predict(28, -12), network1000.predict(28, -12)));
-        System.out.println(String.format("???: network500: %.10f | network1000: %.10f",
-                network500.predict(45, -8), network1000.predict(45, -8)));
-        System.out.println(String.format("???: network500: %.10f | network1000: %.10f",
-                network500.predict(90, 90), network1000.predict(90, 90)));
+         * System.out.println(""); // p/e and earnings growth rate
+         * System.out.println(String.
+         * format("Google: 28, -12: network500: %.10f | network1000: %.10f",
+         * network500.predict(28, -12), network1000.predict(28, -12)));
+         * System.out.println(String.
+         * format("???: network500: %.10f | network1000: %.10f",
+         * network500.predict(45, -8), network1000.predict(45, -8)));
+         * System.out.println(String.
+         * format("???: network500: %.10f | network1000: %.10f",
+         * network500.predict(90, 90), network1000.predict(90, 90)));
          */
 
         /*
@@ -60,6 +70,8 @@ public class App {
          * format(" male', 130, 66: network500learn1: %.10f | network1000learn1: %.10f",
          * network500learn1.predict(130, 66), network1000learn1.predict(130, 66)));
          */
+
+        return prediction;
     }
 
     class Network {
@@ -103,19 +115,20 @@ public class App {
                 Double thisEpochLoss = Util.meanSquareLoss(answers, predictions);
 
                 if (epoch % 10 == 0)
-                    // System.out.println(String.format("Epoch: %s | bestEpochLoss: %.15f | thisEpochLoss: %.15f", epoch, bestEpochLoss, thisEpochLoss));
+                    // System.out.println(String.format("Epoch: %s | bestEpochLoss: %.15f |
+                    // thisEpochLoss: %.15f", epoch, bestEpochLoss, thisEpochLoss));
 
-                if (bestEpochLoss == null) {
-                    bestEpochLoss = thisEpochLoss;
-                    epochNeuron.remember();
-                } else {
-                    if (thisEpochLoss < bestEpochLoss) {
+                    if (bestEpochLoss == null) {
                         bestEpochLoss = thisEpochLoss;
                         epochNeuron.remember();
                     } else {
-                        epochNeuron.forget();
+                        if (thisEpochLoss < bestEpochLoss) {
+                            bestEpochLoss = thisEpochLoss;
+                            epochNeuron.remember();
+                        } else {
+                            epochNeuron.forget();
+                        }
                     }
-                }
             }
         }
     }
