@@ -3,6 +3,14 @@ package com.nighthawk.spring_portfolio.mvc.model;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.nighthawk.spring_portfolio.mvc.person.PersonJpaRepository;
+
+@RestController
+@RequestMapping("/api/network")
 public class callApp {
     public static void main(String[] args) {
         int input1 = 28;
