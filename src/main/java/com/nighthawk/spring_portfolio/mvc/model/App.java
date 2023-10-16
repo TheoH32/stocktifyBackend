@@ -2,8 +2,11 @@ package com.nighthawk.spring_portfolio.mvc.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.lang.Math;
 
 public class App {
@@ -15,6 +18,22 @@ public class App {
     public double makeAPrediction(int num1, int num2) {
         App app = new App();
         return app.trainAndPredict(num1, num2);
+    }
+
+    public double strongerPrediction(int input1, int input2) {
+        App network = new App();
+        int i = 0;
+        List<Double> list = new ArrayList<Double>();
+        for (i = 0; i <= 10; i++) {
+            list.add(network.makeAPrediction(input1, input2));
+        }
+        List<Double> top3 = list.stream()
+                .sorted(Comparator.reverseOrder())
+                .limit(3)
+                .collect(Collectors.toList());
+        double averageOfTop3 = top3.stream().mapToDouble(Double::doubleValue).average()
+                .orElseThrow(NoSuchElementException::new);
+        return averageOfTop3;
     }
 
     public double trainAndPredict(int num1, int num2) {
