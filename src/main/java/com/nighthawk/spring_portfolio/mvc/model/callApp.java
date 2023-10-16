@@ -12,7 +12,7 @@ import com.nighthawk.spring_portfolio.mvc.person.PersonJpaRepository;
 
 @RestController
 @CrossOrigin(origins = "https://theoh32.github.io/Stocktify/")
-@RequestMapping("/api/network")
+@RequestMapping("/api/network/")
 public class callApp {
     public static void main(String[] args) {
         int input1 = 28;
