@@ -1,4 +1,4 @@
-package com.nighthawk.spring_portfolio.mvc.model;
+package com.nighthawk.spring_portfolio.mvc.person;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -8,12 +8,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import com.nighthawk.spring_portfolio.mvc.person.PersonJpaRepository;
-
 @RestController
 @CrossOrigin(origins = "https://theoh32.github.io/Stocktify/")
-@RequestMapping("/api/network/")
-public class callApp {
+@RequestMapping("/api/network")
+public class AppApiController {
+
+    // Autowired enables Control to connect POJO Object through JPA
+    @Autowired
+    private PersonJpaRepository repository;
+
     public static void main(String[] args) {
         int input1 = 28;
         int input2 = -12;
