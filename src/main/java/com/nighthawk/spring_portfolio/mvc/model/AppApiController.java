@@ -17,7 +17,6 @@ public class AppApiController {
 
     // Autowired enables Control to connect POJO Object through JPA
     @Autowired
-    private PersonJpaRepository repository;
 
     public static void main(String[] args) {
         int input1 = 28;
