@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import com.nighthawk.spring_portfolio.mvc.person.PersonJpaRepository;
 
 @RestController
-@CrossOrigin(origins = "FRONTEND_URL")
+@CrossOrigin(origins = "https://theoh32.github.io/Stocktify/")
 @RequestMapping("/api/network")
 public class callApp {
     public static void main(String[] args) {
