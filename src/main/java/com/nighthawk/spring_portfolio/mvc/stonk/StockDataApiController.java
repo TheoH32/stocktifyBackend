@@ -30,10 +30,10 @@ public class StockDataApiController {
                     .build();
             HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(response.body());
+            return new ResponseEntity<>( response.body(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Error fetching stock data: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null;
         
     }
 }
