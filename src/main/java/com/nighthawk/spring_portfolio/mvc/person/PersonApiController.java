@@ -79,6 +79,7 @@ public class PersonApiController {
                                              @RequestParam("name") String name) {
         // A person object WITHOUT ID will create a new record with default roles as student
         Person person = new Person(email, password, name);
+        person.setPassword(password);
         repository.save(person);
         return new ResponseEntity<>(email +" is created successfully", HttpStatus.CREATED);
     }
