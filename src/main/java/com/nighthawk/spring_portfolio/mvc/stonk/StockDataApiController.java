@@ -38,4 +38,42 @@ public class StockDataApiController {
             return new ResponseEntity<>("Error fetching stock data: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/rachits-pe-ratio")
+    public ResponseEntity<String> getPeRatio() {
+        try {
+            // Build the API request URL with the provided symbol
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://quotient.p.rapidapi.com/equity/live?symbol=TSLA&timezone=UTC"))
+                .header("X-RapidAPI-Key", "53ed50b3c5mshb1ebce663573fbap1a08a4jsneab1f395e0a6")
+                .header("X-RapidAPI-Host", "quotient.p.rapidapi.com")
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+            return new ResponseEntity<>(response.body(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error fetching stock data: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // @GetMapping("/rachits-pe-ratio")
+    // public ResponseEntity<String> getPeRatio(@RequestParam(name = "symbol") String symbol) {
+    //     try {
+    //         // Build the API request URL with the provided symbol
+    //         String apiUrl = "https://quotient.p.rapidapi.com/equity/live?symbol=" + symbol + "&timezone=UTC";
+
+    //         HttpRequest request = HttpRequest.newBuilder()
+    //             .uri(URI.create(apiUrl))
+    //             .header("X-RapidAPI-Key", "53ed50b3c5mshb1ebce663573fbap1a08a4jsneab1f395e0a6")
+    //             .header("X-RapidAPI-Host", "quotient.p.rapidapi.com")
+    //             .method("GET", HttpRequest.BodyPublishers.noBody())
+    //             .build();
+    //         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+    //         System.out.println(response.body());
+    //         return new ResponseEntity<>(response.body(), HttpStatus.OK);
+    //     } catch (Exception e) {
+    //         return new ResponseEntity<>("Error fetching stock data: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
 }
