@@ -113,27 +113,29 @@ public class PersonApiController {
         Optional<Person> optional = repository.findById((id));
         if (optional.isPresent()) {  // Good ID
             Person person = optional.get();  // value from findByID
-
+    
             // Extract Attributes from JSON
             Map<String, Object> attributeMap = new HashMap<>();
             for (Map.Entry<String,Object> entry : stat_map.entrySet())  {
                 attributeMap.put(entry.getKey(), entry.getValue());
             }
-
+    
             // Set Date and Attributes to SQL HashMap
             Map<String, Map<String, Object>> date_map = new HashMap<>();
             Map<String, Map<String, Object>> existingStats = person.getStats();
             if (existingStats == null) {
                 existingStats = new HashMap<>();
             }
-
+    
             // Merge the new stats into the existing stats
             existingStats.putAll(date_map);
-
+    
             // Set the updated stats on the person
-            person.setStats(existingStats);
-            repository.save(person);  // conclude by writing the stats updates
-
+            person.setStats(date_map);
+    
+            // Persist the changes to the database
+            repository.save(person);
+    
             // return Person with update Stats
             return new ResponseEntity<>(person, HttpStatus.OK);
         }
