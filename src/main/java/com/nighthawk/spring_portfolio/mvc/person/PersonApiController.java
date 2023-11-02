@@ -105,6 +105,7 @@ public class PersonApiController {
     /*
     The personStats API adds stats by Date to Person table 
     */
+    
     @PostMapping(value = "/setStats", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Person> personStats(@RequestBody final Map<String, Object> stat_map) {
         // Find ID
@@ -126,10 +127,12 @@ public class PersonApiController {
             }
 
             for (Map.Entry<String, Object> entry : attributeMap.entrySet()) {
-                date_map.put(entry.getKey(), entry.getValue());
+                date_map.put((String) entry.getKey(), (Map<String, Object>) entry.getValue());
             }
 
             person.setStats(date_map);
+
+            // Save the changes to the database**
             repository.save(person);
 
             // Return Person with updated Stats
@@ -137,6 +140,7 @@ public class PersonApiController {
         }
         // Return Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
+}
+
 
 }
