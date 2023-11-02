@@ -107,40 +107,39 @@ public class PersonApiController {
     */
     
     @PostMapping(value = "/setStats", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Person> personStats(@RequestBody final Map<String, Object> stat_map) {
-        // Find ID
-        long id = Long.parseLong((String) stat_map.get("id"));
-        Optional<Person> optional = repository.findById(id);
-        if (optional.isPresent()) {
-            Person person = optional.get();
+    public ResponseEntity<Person> personStats(@RequestBody final Map<String,Object> stat_map) {
+        // find ID
+        long id=Long.parseLong((String)stat_map.get("id"));  
+        Optional<Person> optional = repository.findById((id));
+        if (optional.isPresent()) {  // Good ID
+            Person person = optional.get();  // value from findByID
 
             // Extract Attributes from JSON
             Map<String, Object> attributeMap = new HashMap<>();
-            for (Map.Entry<String, Object> entry : stat_map.entrySet()) {
+            for (Map.Entry<String,Object> entry : stat_map.entrySet())  {
                 attributeMap.put(entry.getKey(), entry.getValue());
             }
 
             // Set Date and Attributes to SQL HashMap
-            Map<String, Map<String, Object>> date_map = person.getStats();
-            if (date_map == null) {
-                date_map = new HashMap<>();
+            Map<String, Map<String, Object>> date_map = new HashMap<>();
+            Map<String, Map<String, Object>> existingStats = person.getStats();
+            if (existingStats == null) {
+                existingStats = new HashMap<>();
             }
 
-            for (Map.Entry<String, Object> entry : attributeMap.entrySet()) {
-                date_map.put((String) entry.getKey(), (Map<String, Object>) entry.getValue());
-            }
+            // Merge the new stats into the existing stats
+            existingStats.putAll(date_map);
 
-            person.setStats(date_map);
+            // Set the updated stats on the person
+            person.setStats(existingStats);
+            repository.save(person);  // conclude by writing the stats updates
 
-            // Save the changes to the database**
-            repository.save(person);
-
-            // Return Person with updated Stats
+            // return Person with update Stats
             return new ResponseEntity<>(person, HttpStatus.OK);
         }
-        // Return Bad ID
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-}
+        // return Bad ID
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
+    }
 
 
 }
