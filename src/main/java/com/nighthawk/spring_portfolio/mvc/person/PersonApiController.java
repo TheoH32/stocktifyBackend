@@ -107,44 +107,39 @@ public class PersonApiController {
     */
     
     @PostMapping(value = "/setStats", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Person> personStats(@RequestBody Map<String, Object> stat_map) {
-        // Find ID
-        long id = Long.parseLong((String) stat_map.get("id"));
-        Optional<Person> optional = repository.findById(id);
+    public ResponseEntity<Person> personStats(@RequestBody final Map<String,Object> stat_map) {
+        // find ID
+        long id=Long.parseLong((String)stat_map.get("id")); 
+        Optional<Person> optional = repository.findById((id));
+        if (optional.isPresent()) {  // Good ID
+            Person person = optional.get();  // value from findByID
 
-        if (optional.isPresent()) {
-            Person person = optional.get();
-
-            // Extract and update the stats
-            Map<String, Map<String, Object>> stats = person.getStats();
-            if (stats == null) {
-                stats = new HashMap<>();
-            }
-            
-            String statsKey = "stats"; // The key for your "TSLA" data
-
-            // Check if the stats key exists in the map, if not, create a new inner map
-            Map<String, Object> innerStats = stats.get(statsKey);
-            if (innerStats == null) {
-                innerStats = new HashMap<>();
+            // Extract Attributes from JSON
+            Map<String, Object> attributeMap = new HashMap<>();
+            for (Map.Entry<String,Object> entry : stat_map.entrySet())  {
+                attributeMap.put(entry.getKey(), entry.getValue());
             }
 
-            innerStats.put(statsKey, stat_map.get(statsKey)); // Update the "TSLA" data
+            // Set Date and Attributes to SQL HashMap
+            Map<String, Map<String, Object>> date_map = new HashMap<>();
+            Map<String, Map<String, Object>> existingStats = person.getStats();
+            if (existingStats == null) {
+                existingStats = new HashMap<>();
+            }
+
+            // Merge the new stats into the existing stats
+            existingStats.putAll(date_map);
 
             // Set the updated stats on the person
-            stats.put(statsKey, innerStats);
-            person.setStats(stats);
+            person.setStats(date_map);
+
+            // Persist the changes to the database
             repository.save(person);
 
-            // Return Person with updated stats
+            // return Person with update Stats
             return new ResponseEntity<>(person, HttpStatus.OK);
         }
-
-        // Return Bad ID
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        // return Bad ID
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
     }
-
-
-
-
 }
